@@ -1,0 +1,15 @@
+.modal-dialog{
+	width: 900px;
+}
+#formAddProduct .tblCommon td, #formUpdateProduct .tblCommon td{
+	width:30%;
+	padding: 5px 10px 5px 0px;
+}
+#formAddProduct .tblDetail td, #formUpdateProduct .tblDetail td{
+	width:20%;
+	padding: 5px 10px 5px 0px;
+}
+.field{
+	width: 25%;
+	font-weight: bold;
+}
