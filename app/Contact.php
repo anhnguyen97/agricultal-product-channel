@@ -21,12 +21,17 @@ class Contact extends Model
 
     public function admin()
     {
-    	return $this->belongsTo('App\Admin', 'id', 'uuid');
+    	return $this->belongsTo('App\Admin', 'username', 'username');
     }
+
+    // public function user()
+    // {
+    //     return $this->belongsTo('App\User', 'id', 'uuid');
+    // }
 
     public function user()
     {
-    	return $this->belongsTo('App\User', 'id', 'uuid');
+    	return $this->belongsTo('App\User', 'username', 'username');
     }
 
     public function transactions()

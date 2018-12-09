@@ -29,6 +29,12 @@ Route::group(['prefix' => 'admin'], function() {
 		Route::get('', 'ManagePageController@index')->name('admin.home');
 		Route::get('home', 'ManagePageController@index');
 
+		//update account
+		Route::group(['prefix' => 'admin_profile'], function() {
+			Route::get('', 'AdminController@getProfile')->name('admin.profile');
+			Route::post('update/{admin_id}', 'AdminController@adminUpdateAccount')->name('admin.profile.update');
+		});
+
 		Route::group(['prefix' => 'admin-account'], function() {
 
 			Route::get('', 'AdminController@index')->name('admin.admin');
@@ -88,6 +94,11 @@ Route::get('products', 'HomeController@getListProduct')->name('channel.getListPr
 
 //FARMER
 Route::middleware('auth')->group(function(){
+
+	Route::group(['prefix' => 'profile'], function() {
+		Route::get('', 'UserController@getAccount')->name('user.profile');
+		Route::post('update/{user_id}', 'UserController@userUpdateAccount')->name('user.profile.update');
+	});
 
 	Route::group(['prefix' => 'farmer'], function() {
 

@@ -199,8 +199,8 @@ class ProductController extends Controller
     {
         $trader_id = Auth::user()->id;
         $listProduct = Product::where([
-            ['trader_id','=',$trader_id],
-            ['trader_delete', '=', 0],
+            ['farmer_id','=',$trader_id],
+            ['delete', '=', 0],
         ])->get();
         return Datatables::of($listProduct)
         ->addColumn('action', function ($product) {

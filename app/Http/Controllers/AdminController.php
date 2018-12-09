@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Admin;
 use App\Contact;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {    
@@ -138,5 +140,58 @@ class AdminController extends Controller
     public function destroy($id)
     {
         return Admin::find($id)->delete()?response()->json('success'):response([],400);
+    }
+
+    public function getProfile()
+    {
+        $admin_id = Auth::guard('admin')->user()->id;
+        $account = Admin::where('id', $admin_id)->first();
+        $account['contact'] = $account->contact;
+        return view('admin.profile.index',[
+            'account' => $account,
+        ]);
+    }
+
+    public function adminUpdateAccount(Request $request, $admin_id)
+    {
+        $date = date('YmdHis', time());
+        $data = array(
+            'name' =>$request->name,
+            'email' =>$request->email,
+            'username' =>$date.str_slug($request->name),
+            'avatar' => $request->avatar,
+        );
+
+        if ($request->hasFile('avatar')) {
+            $extension = '.'.($request->avatar)->getClientOriginalExtension();
+            $file_name = md5($request->name).'_'. $date . $extension;
+            $data['avatar']->storeAs('public/admins/avatar',$file_name);
+            $data['avatar'] = 'storage/admins/avatar/'.$file_name;
+
+            //xóa avatar cũ
+            $file = explode('/',$request->old_avatar)[3];
+            if($file != 'user-default.png'){
+                Storage::delete($file);
+                unlink(storage_path('app/public/admins/avatar/'.$file));
+            }            
+        } else {
+            $data['avatar']= $request->old_avatar;
+        }
+
+        $user = Admin::find($admin_id)->update($data);
+        if ($user) {
+            $account = Admin::where('id', $admin_id)->first();
+            $data = array(
+                'username' => $account['username'],
+                'mobile' => $request->mobile,
+                'address' => $request->address,
+                'name' => $request->name,
+            );
+            $contact = Contact::where('id', $request->contact_id)->update($data);            
+            $account['contact'] = $account->contact;
+            return redirect()->back()->with('success', 'Cập nhật tài khoản thành công');   
+        }  else {
+            return redirect()->back()->with('error', 'Cập nhật tài khoản không thành công');   
+        }    
     }
 }

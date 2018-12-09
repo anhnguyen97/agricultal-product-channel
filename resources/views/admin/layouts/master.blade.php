@@ -86,7 +86,7 @@
                 <!-- Menu Footer-->
                 <li class="user-footer">
                   <div class="pull-left">
-                    <a href="#" class="btn btn-default btn-flat">Profile</a>
+                    <a href="{{ route('admin.profile') }}" class="btn btn-default btn-flat">Profile</a>
                   </div>
                   <div class="pull-right">
                     <a href="{{ route('admin.logout') }}" class="btn btn-default btn-flat" onclick="event.preventDefault();
@@ -203,7 +203,7 @@
       <div class="pull-right hidden-xs">
         <b>Version</b> 2.1.0
       </div>
-      <strong>Copyright &copy; 2018-2019 <a href="">Project III - IT4421 Soict</a>.</strong> All rights reserved.
+      <strong>Copyright &copy; 2018-2019 <a href="">Đồ án Hệ thống thông tin 20181</a>.</strong>
     </footer>
     <!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>

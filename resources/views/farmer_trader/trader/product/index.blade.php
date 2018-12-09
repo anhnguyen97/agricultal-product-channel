@@ -115,7 +115,7 @@
 
 		swal({
 			title: "Are you sure?",
-			text: "Once deleted, you will not be able to recover this Product!",
+			text: "Bạn không thể lấy lại thông tin Sản phẩm sau khi xóa!",
 			icon: "warning",
 			buttons: true,
 			dangerMode: true,
@@ -123,7 +123,7 @@
 		.then((willDelete) => {
 			if (willDelete) {
 				$.ajax({
-					url: '{{ asset('') }}product/delete/'+id,
+					url: '{{ asset('') }}trader/product/delete/'+id,
 					type: 'DELETE',
 					dataType:"json",
 					success: function(res){
@@ -131,21 +131,21 @@
 							var row = document.getElementById('row-'+id);
 							row.remove();
 							swal({
-								title: "The products has been deleted!",
+								title: "Nông sản đã bị xóa khỏi danh sách!",
 								icon: "success",
 							});
 						}					
 					},
 					error: function(xhr, ajaxOptions, thrownError) {
 						swal({
-							title: "Delete this product failed!",
+							title: "Xảy ra lỗi khi xóa nông sản này!",
 							icon: "error",
 						});
 					}
 				})
 			} else {
 				swal({
-					title: "The product is safety!",
+					title: "Nông sản được an toàn!",
 					icon: "success",
 					button: "OK!",
 				});

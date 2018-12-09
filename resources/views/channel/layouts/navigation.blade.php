@@ -7,7 +7,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="top_nav_left">free shipping on all u.s orders over $50</div>
+                    <div class="top_nav_left">CHUNG TAY PHÁT TRIỂN NÔNG NGHIỆP SẠCH VIỆT NAM</div>
                 </div>
                 <div class="col-md-6 text-right">
                     <div class="top_nav_right">
@@ -18,9 +18,9 @@
                                     {{Auth::user()->name}}
                                     <i class="fa fa-angle-down"></i>
                                 </a>
-                                <ul class="account_selection">
-                                    <li><a href="#"><i class="fa fa-sign-in" aria-hidden="true"></i>Profile</a></li>
-                                    <li>
+                                <ul class="account_selection" style="width: 120px">
+                                    <li ><a href="{{ route('user.profile') }}"><i class="fa fa-sign-in" aria-hidden="true"></i>Profile</a></li>
+                                    <li >
                                         <a href="{{ route('logout') }}" class="btn btn-default btn-flat" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{-- <i class="fa fa-user-plus" aria-hidden="true"></i> --}}Logout
                                         </a>
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -33,7 +33,7 @@
                                     Account
                                     <i class="fa fa-angle-down"></i>
                                 </a>
-                                <ul class="account_selection">
+                                <ul class="account_selection" style="width: 120px">
                                     <li><a href="{{ route('login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i>Sign In</a></li>
                                     <li><a href="#"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a></li>
                                 </ul>
