@@ -28,4 +28,9 @@ class Contact extends Model
     {
     	return $this->belongsTo('App\User', 'id', 'uuid');
     }
+
+    public function transactions()
+    {
+        return $this->belongsToMany('App\Transaction');
+    }
 }

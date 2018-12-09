@@ -21,9 +21,10 @@ class CreateProductsTable extends Migration
             $table->integer('category_id');
             $table->string('thumbnail');
             $table->double('price', 20, 2);
+            $table->string('unit', 50)->default('kg');
             $table->integer('quantity');
             $table->float('discount', 6,2);
-            $table->string('description');
+            $table->text('description');
             $table->text('content')->nullable();
             $table->integer('delete');
             $table->timestamps();

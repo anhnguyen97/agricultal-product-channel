@@ -175,6 +175,9 @@ return [
 
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Unisharp\Ckeditor\ServiceProvider::class,
+
+        Fx3costa\LaravelChartJs\Providers\ChartjsServiceProvider::class
 
     ],
 

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Category;
 
 class Product extends Model
 {
@@ -12,7 +13,7 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-    	'name', 'farmer_id', 'category_id', 'slug', 'thumbnail', 'price', 'quantity', 'description', 'discount', 'content', 'delete'
+    	'name', 'farmer_id', 'category_id', 'slug', 'thumbnail', 'price', 'unit',  'quantity', 'description', 'discount', 'content', 'delete',
     ];
 
     protected $table = 'products';
@@ -23,5 +24,15 @@ class Product extends Model
     public function category()
     {
     	return $this->belongsTo('App\Category');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function transactionDetail()
+    {
+        return $this->belongsToMany('App\TransactionDetail', 'id', 'product_id');
     }
 }

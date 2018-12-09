@@ -37,4 +37,14 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Contact', 'username', 'username');
     }
+
+    public function products()
+    {   
+        return $this->hasMany('App\Product');        
+    }
+
+    // public function transactions()
+    // {
+    //     return $this->hasMany('App\Transaction', 'farmer_id', 'id');
+    // }
 }

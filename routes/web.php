@@ -42,9 +42,7 @@ Route::group(['prefix' => 'admin'], function() {
 			Route::put('/update/{id}', 'AdminController@update');
 
 			Route::delete('/delete/{id}', 'AdminController@destroy');
-
 		});
-
 
 		Route::group(['prefix' => 'user-account'], function() {
 
@@ -59,7 +57,6 @@ Route::group(['prefix' => 'admin'], function() {
 			Route::put('/update/{id}', 'UserController@update');
 
 			Route::delete('/delete/{id}', 'UserController@destroy');
-
 		});
 
 		Route::group(['prefix' => 'category'], function() {
@@ -75,7 +72,6 @@ Route::group(['prefix' => 'admin'], function() {
 			Route::put('/update/{id}', 'CategoryController@update');
 
 			Route::delete('/delete/{id}', 'CategoryController@destroy');
-
 		});
 	});
 
@@ -83,8 +79,70 @@ Route::group(['prefix' => 'admin'], function() {
 
 Auth::routes();
 
-// Route::get('/home', 'AdminController@index')->name('home');
+//HOME
+Route::get('', 'HomeController@index')->name('channel.index');
+Route::get('home', 'HomeController@index')->name('channel.home');
+Route::get('product_detail', 'HomeController@product_detail')->name('channel.product_detail');
+Route::get('products', 'HomeController@getListProduct')->name('channel.getListProduct');
+// Route::get('updateProduct', 'ProductController@updateDb');
 
-Route::get('', function() {
-    return view('channel.index');
+//FARMER
+Route::middleware('auth')->group(function(){
+
+	Route::group(['prefix' => 'farmer'], function() {
+
+		Route::group(['prefix' => 'product'], function() {
+			Route::get('', 'ProductController@farmerProduct')->name('farmer.product');
+			Route::get('getData', 'ProductController@farmerGetProduct')->name('farmer.product.getData');
+
+			Route::post('store', 'ProductController@store')->name('farmer.product.store');
+			Route::delete('delete/{id}', 'ProductController@destroy');
+			Route::get('edit/{id}', 'ProductController@edit');
+			Route::put('update/{id}', 'ProductController@update');
+			Route::get('show_pro/{$id}', 'ProductController@show');
+		});	
+
+		Route::group(['prefix' => 'transaction'], function() {
+			Route::get('', 'TransactionController@farmerIndex')->name('farmer.transaction');
+			Route::get('getData', 'TransactionController@farmerGetTransaction')->name('farmer.transaction.getData');
+
+			Route::get('{id}', 'TransactionController@farmerTranDetail');
+			Route::get('detail/getData/{tran_id}', 'TransactionController@farmerGetTranDetail')->name('farmer.transDetail.getData');
+
+			Route::delete('delete/{id}', 'TransactionController@farmerDestroy');			
+		});
+	});
+
+	//TRADER
+	Route::group(['prefix' => 'trader'], function() {
+
+		Route::group(['prefix' => 'product'], function() {
+			Route::get('', 'ProductController@traderProduct')->name('trader.product');
+			Route::get('getData', 'ProductController@traderGetProduct')->name('trader.product.getData');
+
+			Route::post('store', 'ProductController@store')->name('trader.product.store');
+			Route::delete('delete/{id}', 'ProductController@destroy');
+			Route::get('edit/{id}', 'ProductController@edit');
+			Route::put('update/{id}', 'ProductController@update');
+			Route::get('show_pro/{$id}', 'ProductController@show');
+		});	
+
+		Route::group(['prefix' => 'transaction'], function() {
+			Route::get('import', 'TransactionController@traderImport')->name('trader.transaction.import');
+			Route::get('import/getData', 'TransactionController@traderGetTranImport')->name('trader.transaction.getDataImport');
+
+			Route::get('export', 'TransactionController@traderExport')->name('trader.transaction.export');
+			Route::get('export/getData', 'TransactionController@traderGetTranExport')->name('trader.transaction.getDataExport');
+
+			Route::get('import/{id}', 'TransactionController@traderTranImportDetail');
+			Route::get('import_detail/getData/{tran_id}', 'TransactionController@traderGetTranImportDetail')->name('trader.transDetail.getData');
+
+			Route::get('export/{id}', 'TransactionController@traderTranExportDetail');
+			// Route::get('export_detail/getData/{tran_id}', 'TransactionController@traderGetTranImportDetail')->name('trader.transDetail.getData');
+
+			Route::delete('delete/{id}', 'TransactionController@traderDestroy');			
+		});
+		
+	});
+	
 });

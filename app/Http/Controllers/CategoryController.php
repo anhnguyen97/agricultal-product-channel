@@ -121,6 +121,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
+        $data['slug'] = str_slug($data['name'],'-');
         // console.log($data);
         $res = Category::find($id)->update($data);
         if($res == true){
