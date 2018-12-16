@@ -55,7 +55,41 @@
 </div>
 </section>
 <!-- /.content -->
-
+{{-- MODAL EDIT TRANSACTION --}}
+<div class="modal fade" id="modalEdit">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">				
+				<h4 class="modal-title">Update transaction</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form action="" method="POST" role="form" id="formUpdateTransaction" name="formUpdateTransaction">
+					@csrf					
+					<input type="hidden" name="edit-id" value="" id="edit-id">			
+					<div class="form-group">
+						<label for="">Tình trạng thanh toán</label>
+						<select name="edit-payment" class="form-control" id="edit-payment">
+							<option value="1">Đã thanh toán</option>
+							<option value="0">Chưa thanh toán</option>
+						</select>
+					</div>	
+					<div class="form-group">
+						<label for="">Tình trạng giao dịch</label>
+						<select name="edit-status" class="form-control" id="edit-status">
+							<option value="1">Đã hoàn thành</option>
+							<option value="0">Đang xử lý</option>
+						</select>
+					</div>	
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Update</button>
+					</div>	
+				</form>
+			</div>			
+		</div>
+	</div>
+</div>
 @section('footer')
 @include('channel.layouts.footer')
 @endsection
@@ -103,16 +137,16 @@
 			{ data: 'total', name: 'total' },
 			{ data: 'payment', name: 'payment', render: function(data, type, full, meta){
 				if (data == 1) {
-					return '<input type="checkbox" class="payment" name="payment" id="'+data+'"  checked/> Đã thanh toán';
+					return 'Đã thanh toán';
 				} else {
-					return '<input type="checkbox" class="payment"  name="payment" id="'+data+'" /> Đã thanh toán';
+					return 'Chưa thanh toán';
 				}
 			}},
 			{ data: 'status', name: 'status', render: function(data, type, full, meta){
 				if (data == 1) {
-					return '<input name="status" class="status" type="checkbox" id="'+data+'"  checked /> Đã hoàn thành';
+					return 'Đã hoàn thành';
 				} else {
-					return '<input name="status" class="status" type="checkbox" id="'+data+'" /> Đã hoàn thành';
+					return 'Đang xử lý';
 				}
 			}},
 			{ data: 'created_at', name: 'created_at' },
@@ -122,30 +156,57 @@
 		});
 	})
 
+	// show Transaction detail to update
+	$('.tableTransaction').on('click', '.btnEdit', function(event) {
+		event.preventDefault();
+		/* Act on the event */
+		var id = $(this).data('id');
+		
+		$.ajax({
+			url: '{{ asset('') }}farmer/transaction/edit/'+id,
+			type: 'GET',
+			success: function(res){
+				console.log(res);
+				$('#modalEdit').modal('show');
+				$('#edit-id').attr('value',res.id);
+				$('#edit-status option[value="'+res.status+'"]').prop('selected', true);
+				$('#edit-payment option[value="'+res.payment+'"]').prop('selected', true);
+			},
+			error: function(xhr, ajaxOptions, thrownError){
+				toastr['error']('Can\'t display Product to edit');
+			}
+		})
+	});
+
 	// update Product
-	// $('.tableTransaction').on('click', '.btnUpdate' , function(event){
-	// 	event.preventDefault();
-	// 	var id = 'row-'+$(this).data('id');
-	// 	var row = document.getElementById(id);
-	// 	var status = ;
-	// 	alert(status);
-	// 	$.ajax({
-	// 		url: '{{ asset('') }}product/update/'+id,
-	// 		type: 'PUT',
-	// 		data:formData,
-	// 		success: function(res){
-	// 			$('#modalEdit').modal('hide');
-	// 			var row = document.getElementById('row-'+res.id);
-	// 			console.log(res);
-	// 			row.remove();
-	// 			toastr['success']('Update Product: '+res.name+' successfully!');
-	// 			$('#tableTransaction').prepend('<tr id="row-'+res.id+'" role="row"><td>'+res.id+'</td><td><img src="http://agri.me/'+res.thumbnail+'" height="80px"></td><td>'+res.name+'</td><td>'+res.category_name+'</td><td>'+res.quantity+'</td><td>'+res.price+'</td><td>'+res.updated_at+'</td><td><a title="Detail" class="btn btn-info fa fa-eye btn-sm  btnShow" data-id="'+res.id+'" id="row-'+res.id+'"></a>&nbsp;<a title="Update" class="btn btn-warning btn-sm fa fa-pencil btnUpdate" data-id="'+res.id+'"></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm fa fa-trash-o btnDelete" data-id="'+res.id+'"></a></td></tr>');				
-	// 		},
-	// 		error: function(xhr, ajaxOptions, thrownError){
-	// 			toastr['error']('Edit failed!');
-	// 		}
-	// 	})
-	// })
+	$('#formUpdateTransaction').on('submit', function(event){
+		event.preventDefault();
+		var id = $('#edit-id').val();
+		$.ajax({
+			url: '{{ asset('') }}farmer/transaction/update/'+id,
+			type: 'POST',
+			data : {
+				status: $('#edit-status').val(),
+				payment: $('#edit-payment').val(),
+			},		
+			success: function(res){
+				console.log(res);
+				$('#modalEdit').modal('hide');
+				console.log(res);
+				if (res.error != null) {
+					toastr['error'](res.error);
+				} else {
+					var row = document.getElementById('row-'+res.id);
+					row.remove();
+					toastr['success']('Update transactions successfully!');
+					$('#tableTransaction').prepend('<tr id="row-'+res.id+'" role="row"><td>'+res.id+'</td><td>'+res.trader+'</td><td>'+res.total+'</td><td>'+res.payment+'</td><td>'+res.status+'</td><td>'+res.created_at+'</td><td>'+res.updated_at+'</td><td><a title="Detail" href="http://agri.me/farmer/transaction/'+res.id+'" class="btn btn-info btn-sm fa fa-eye btnShow" data-id="'+res.id+'" id="row-'+res.id+'"></a>&nbsp;<a title="Update" class="btn btn-warning btn-sm fa fa-pencil btnEdit" data-id='+res.id+'></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm fa fa-trash-o btnDelete" data-id='+res.id+'></a></td></tr>');	
+				}				
+			},
+			error: function(xhr, ajaxOptions, thrownError){
+				toastr['error']('Edit failed!');
+			}
+		})
+	})
 
 	//delete product
 	$('.tableTransaction').on('click', '.btnDelete', function(event) {

@@ -35,9 +35,10 @@
                                 </a>
                                 <ul class="account_selection" style="width: 120px">
                                     <li><a href="{{ route('login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i>Sign In</a></li>
-                                    <li><a href="#"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a></li>
+                                    <li><a href="{{ route('register') }}"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a></li>
                                 </ul>
                                 @endif
+
                             </li>
                         </ul>
                     </div>
@@ -48,24 +49,27 @@
 
     <!-- Main Navigation -->
 
-    <div class="main_nav_container">
+    <div class="main_nav_container" style="background-color: transparent!important">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-right">
                     <div class="logo_container">
                         <a href="{{ route('channel.index') }}">Agri<span>pc</span></a>
                     </div>
-                    <nav class="navbar">
+                    <nav class="navbar" style="height: 80px">
                         @if (Auth::check())
                         @if (Auth::user()->is_farmer==1)
-                        <ul class="navbar_menu">
+                        <ul class="navbar_menu" style="margin-bottom: 0px">
                             <li><a href="{{ route('channel.index') }}">Trang chủ</a></li>
                             <li><a href="{{ route('farmer.product') }}">QL Nông sản</a></li>
                             <li><a href="{{ route('farmer.transaction') }}">QL Giao dịch</a></li>
                             <li><a href="#">Thống kê</a></li>
                         </ul>
+                        <ul class="navbar_user" style="margin-bottom: 0px">
+                            <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+                        </ul>
                         @else
-                        <ul class="navbar_menu">
+                        <ul class="navbar_menu" style="margin-bottom: 0px">
                             <li><a href="{{ route('channel.index') }}">Trang chủ</a></li>
                             <li><a href="{{ route('trader.product') }}">QL Kho</a></li>
                             <li class="nav-item dropdown">
@@ -77,18 +81,23 @@
                             </li>
                             <li><a href="#">Thống kê</a></li>
                         </ul>
-                        @endif
-                        @else
-                        <ul class="navbar_menu">
-                            <li><a href="{{ route('channel.index') }}">Trang chủ</a></li>
-                            <li><a href="#">Nông sản</a></li>
-                            <li><a href="#">Giảm giá</a></li>
-                            <li><a href="#">Liên hệ</a></li>
+                        <ul class="navbar_user" style="margin-bottom: 0px">
+                            <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+                            <li class="checkout">
+                                <a href="{{ asset('') }}trader/cart">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    <div id="checkout_items" class="checkout_items"></div>
+                                </a>
+                            </li>
                         </ul>
                         @endif
-                        <ul class="navbar_user">
+                        @else
+                        <ul class="navbar_menu" style="margin-bottom: 0px">
+                            <li><a href="{{ route('channel.index') }}">Trang chủ</a></li>
+                            <li><a href="#">Liên hệ</a></li>
+                        </ul>
+                        <ul class="navbar_user" style="margin-bottom: 0px">
                             <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-flag" aria-hidden="true"></i></a></li>
                            {{--  <li class="checkout">
                                 <a href="#">
                                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -96,6 +105,7 @@
                                 </a>
                             </li> --}}
                         </ul>
+                        @endif
                         <div class="hamburger_container">
                             <i class="fa fa-bars" aria-hidden="true"></i>
                         </div>

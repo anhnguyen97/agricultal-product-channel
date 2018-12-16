@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+use App\Contact;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -52,6 +55,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'is_farmer' => ['required'],
         ]);
     }
 
@@ -63,10 +67,32 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $date = date('YmdHis', time());
+        Contact::create([
+            'username' => $date.str_slug($data['name']),
+            'mobile' => 0,
+            'address' => '',
+            'name' => $data['name'],
+        ]);
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'avatar' => 'storage/users/avatar/user-default.png',
+            'username' => $date.str_slug($data['name']),
+            'is_farmer' => $data['is_farmer'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        $this->guard()->login($user);
+
+        return $this->registered($request, $user)
+                        ?: redirect($this->redirectPath());
     }
 }

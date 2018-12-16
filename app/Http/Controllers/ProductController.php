@@ -78,9 +78,20 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::find($id);
-        $data = $request->all();
 
-        $data['slug'] = str_slug($request->name).'-'.md5($product->farmer_id); 
+        $data = array(
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+            'description' => $request->description,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'discount' => $request->discount,
+            'content' => $request->content,
+        );
+        // $data = $request->all();
+        // return $data;
+
+        $data['slug'] = str_slug($request->name).md5($product->farmer_id); 
 
         $date = date('YmdHis', time());
         if ($request->hasFile('thumbnail')) {
@@ -96,7 +107,7 @@ class ProductController extends Controller
             $data['thumbnail']->storeAs('public/products/',$file_name);
             $data['thumbnail'] = 'storage/products/'.$file_name;
         } 
-        $product = Product::find($id)->update($data);
+        $product = Product::where('id', $id)->update($data);
         if ($product == true ) {
             $product = Product::find($id);
             $product['category_name'] = $product->category->name;
@@ -174,7 +185,7 @@ class ProductController extends Controller
             return $category->name;
         })
         ->editColumn('quantity', function($product){
-            return number_format($product->quantity);
+            return number_format($product->quantity,3);
         })
         ->editColumn('price', function($product){
             return number_format($product->price, 2);
@@ -214,7 +225,7 @@ class ProductController extends Controller
             return $category->name;
         })
         ->editColumn('quantity', function($product){
-            return number_format($product->quantity);
+            return number_format($product->quantity, 3);
         })
         ->editColumn('price', function($product){
             return number_format($product->price, 2);

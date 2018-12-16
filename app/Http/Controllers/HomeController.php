@@ -4,20 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Product;
+use App\User;
 use App\Category;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
-
     /**
      * Show the application dashboard.
      *
@@ -25,9 +16,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $product = Product::all();
+        $trader_id_list = User::select('id')->where('is_farmer', 0)->get();
+        $all_product = Product::where('delete', 0)->whereNotIn('farmer_id', $trader_id_list)->paginate(12);
+        foreach ($all_product as $key => $product) {
+            if (strlen($product->description)>=80) {
+                $pos=strpos($product->description, ' ', 80);
+                $product['description'] = substr($product->description,0,$pos); 
+            }
+            $product['farmer_name'] = $product->user->name;
+        }
         return view('channel.index',[
-            'all_product' => $product,
+            'list_product' => $all_product,
         ]);
     }
 
@@ -36,11 +35,22 @@ class HomeController extends Controller
      * show list product
      *  @return \Illuminate\Http\Response
      */
-    public function getListProduct()
+    // public function getListProduct()
+    // {
+    //     $list_product = Product::paginate(3);
+    //     return view('channel.pages.products',[
+    //         'list_product' => $list_product,
+    //     ]);
+    // }
+
+    public function product_detail($slug)
     {
-        $list_product = Product::paginate(3);
-        return view('channel.pages.products',[
-            'list_product' => $list_product,
+        $product = Product::where('slug', $slug)->first();
+        $product['farmer'] = $product->user;
+        $product['farmer_contact'] = $product->user->contact;
+        // dd($product);
+        return view('channel.pages.product_detail', [
+            'product' => $product,
         ]);
     }
 }

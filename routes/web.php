@@ -88,7 +88,9 @@ Auth::routes();
 //HOME
 Route::get('', 'HomeController@index')->name('channel.index');
 Route::get('home', 'HomeController@index')->name('channel.home');
-Route::get('product_detail', 'HomeController@product_detail')->name('channel.product_detail');
+
+Route::get('product/{slug}', 'HomeController@product_detail');
+
 Route::get('products', 'HomeController@getListProduct')->name('channel.getListProduct');
 // Route::get('updateProduct', 'ProductController@updateDb');
 
@@ -109,8 +111,8 @@ Route::middleware('auth')->group(function(){
 			Route::post('store', 'ProductController@store')->name('farmer.product.store');
 			Route::delete('delete/{id}', 'ProductController@destroy');
 			Route::get('edit/{id}', 'ProductController@edit');
-			Route::put('update/{id}', 'ProductController@update');
-			Route::get('show_pro/{$id}', 'ProductController@show');
+			Route::post('update/{id}', 'ProductController@update');
+			Route::get('show_pro/{id}', 'ProductController@show');
 		});	
 
 		Route::group(['prefix' => 'transaction'], function() {
@@ -119,6 +121,9 @@ Route::middleware('auth')->group(function(){
 
 			Route::get('{id}', 'TransactionController@farmerTranDetail');
 			Route::get('detail/getData/{tran_id}', 'TransactionController@farmerGetTranDetail')->name('farmer.transDetail.getData');
+
+			Route::get('edit/{id}', 'TransactionController@farmerEdit');
+			Route::post('update/{id}', 'TransactionController@farmerUpdate');
 
 			Route::delete('delete/{id}', 'TransactionController@farmerDestroy');			
 		});
@@ -153,6 +158,15 @@ Route::middleware('auth')->group(function(){
 
 			Route::delete('delete/{id}', 'TransactionController@traderDestroy');			
 		});
+
+		Route::group(['prefix' => 'order'], function() {
+		    Route::get('{id}', 'TransactionController@addCart');
+		    Route::get('increase/{rowId}', 'TransactionController@increase');
+		    Route::get('decrease/{rowId}', 'TransactionController@decrease');
+		});
+
+		Route::get('cart', 'TransactionController@getCart');
+		Route::post('pay', 'TransactionController@pay');
 		
 	});
 	

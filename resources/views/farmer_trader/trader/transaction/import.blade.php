@@ -36,7 +36,7 @@
 				<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Quản lý Nhập hàng</a></li>
 			</ul>
 		</div>
-		<a class="btn btn-primary" href='{{ route('channel.getListProduct') }}' style="margin-bottom: 20px;"><i class="fa fa-pagelines" aria-hidden="true"> Nhập nông sản mới</i></a>
+		<a class="btn btn-primary" href='{{ route('channel.home') }}' style="margin-bottom: 20px;"><i class="fa fa-pagelines" aria-hidden="true"> Nhập nông sản mới</i></a>
 		<table id="tableTransaction" class="table table-bordered text-center tableTransaction" >
 			<thead style="width: 100%">
 				<tr>

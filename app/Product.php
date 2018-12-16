@@ -28,7 +28,7 @@ class Product extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User','farmer_id', 'id');
     }
 
     public function transactionDetail()

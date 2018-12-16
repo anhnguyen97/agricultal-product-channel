@@ -33,7 +33,8 @@
 			</ul>
 		</div>
 		<a class="btn btn-primary" data-toggle="modal" href='#modalAddProduct' style="margin-bottom: 20px;"><i class="fa fa-pagelines" aria-hidden="true"> New</i></a>
-		
+	</div>
+	<div class="container">
 		<table id="tableProduct" class="table table-bordered table-striped text-center tableProduct" style="width:100%">
 			<thead>
 				<tr>
@@ -54,7 +55,7 @@
 <!-- /.content -->
 
 @section('footer')
-	@include('channel.layouts.footer')
+@include('channel.layouts.footer')
 @endsection
 
 {{-- MODAL ADD PRODUCT --}}
@@ -160,11 +161,11 @@
 
 <!--/ MODAL SHOW PRODUCT DETAILs-->
 <div class="modal fade" id="modalShow">
-	<div class="modal-dialog" style="width: 600px;">
+	<div class="modal-dialog" style="width: 800px;">
 		<div class="modal-content">
-			<div class="modal-header">
+			<div class="modal-header">				
+				<h4 class="modal-title">Thông tin chi tiết nông sản: <span id="product_name"></span></h4>
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Thông tin chi tiết nông sản <span id="product_name"></span></h4>
 			</div>
 			<div class="modal-body">
 				<table class="table table-hover">
@@ -180,15 +181,18 @@
 						<td colspan="2"><h3><div id="show-name" ></div></h3></td>
 					</tr>
 					<tr>
-						<td colspan="2">
-							<div id="show-category-name"></div>
+						<td>Danh mục</td>
+						<td><div id="show-category-name"></div></td>
+					</tr>
+					<tr>
+						<td colspan="2">							
 							<div id="show-description"></div>
 							<div id="show-content"></div>
 						</td>
 					</tr>
 					<tr>
 						<td class="field">Sản lượng: </td>
-						<td><div id="show-quantity">&nbsp;<span id="show-unit"></span></div></td>
+						<td><span id="show-quantity">&nbsp;</span><span id="show-unit"></span></td>
 					</tr>					
 					<tr>
 						<td class="field">Gía gốc: </td>
@@ -214,22 +218,20 @@
 				
 			</div>
 			<div class="modal-body">
-				<form class="container-fluid" method="POST" id="formUpdateProduct">
-					@method('PUT')
+				<form class="container-fluid" id="formUpdateProduct">
+					@method('POST')
 					@csrf
-					
-
-					<input type="hidden" name="editId" id="editId" value="">
+					<input type="hidden" name="edit-id" id="edit-id" value="">
 					<div class="form-group row">
 						<label for="editName" class="col-sm-2 form-control-label">Name</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="editName">
+							<input type="text" class="form-control" id="editName" name="editName">
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="editDescription" class="col-sm-2 form-control-label">Description</label>
 						<div class="col-sm-10">
-							<textarea name="editDescription" class="form-control" id="editDescription"></textarea>
+							<textarea name="editDescription" class="form-control" id="editDescription" name="editDescription"></textarea>
 						</div>
 					</div>
 					<div class="form-group row">
@@ -241,14 +243,14 @@
 					<div class="form-group row">
 						<label for="" class="col-sm-2 form-control-label">Category</label>
 						<div class="col-sm-10">
-							<select class="custom-select" id="editCategory">
+							<select class="custom-select" id="editCategory" name="editCategory">
 								@foreach ($allCategory as $category)
 								<option value="{{$category->id}}">{{$category->name}}</option>
 								@endforeach								
 							</select>
 						</div>
 					</div>
-					<div class="form-group row">
+					{{-- <div class="form-group row">
 						<label for="editThumbnail" class="col-sm-2 form-control-label">Thumbnail</label>
 						<div class="col-sm-10">
 							<div class="input-group mb-3">
@@ -262,18 +264,18 @@
 							</div>
 							<img src="" class="img-fluid img-thumbnail" alt="Responsive image" id="displayThumbnail" style="width: 150px; height: auto">
 						</div>
-					</div>			
+					</div>	 --}}		
 					<div class="form-group row">
 						<label for="editQuantity" class="col-sm-2 form-control-label">Quantity</label>
 						<div class="col-sm-10">
-							<input type="number" class="form-control" id="editQuantity">
+							<input type="number" class="form-control" id="editQuantity" name="editQuantity">
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="editPrice" class="col-sm-2 form-control-label">Price</label>
 						<div class="col-sm-10">
 							<div class="input-group">
-								<input type="number"  id="editPrice" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+								<input type="number"  id="editPrice" name="editPrice" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
 								<div class="input-group-append">
 									<span class="input-group-text">VNĐ</span>
 									<span class="input-group-text">.00</span>
@@ -285,7 +287,7 @@
 						<label for="editDiscount" class="col-sm-2 form-control-label">Discount</label>
 						<div class="col-sm-10">						
 							<div class="input-group">
-								<input type="number" id="editDiscount" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+								<input type="number" step="0.1" id="editDiscount" name="editDiscount" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
 								<div class="input-group-append">
 									<span class="input-group-text">%</span>
 								</div>
@@ -413,7 +415,7 @@
 			success: function(res){
 				console.log(res);
 				$('#modalEdit').modal('show');
-				$('#editId').attr('value',res.id);
+				$('#edit-id').attr('value',res.id);
 				$('#editName').attr('value',res.name);
 				$('#editQuantity').attr('value',res.quantity);
 				$('#editPrice').attr('value',res.price);
@@ -421,7 +423,7 @@
 				CKEDITOR.instances['editContent'].setData(res.content);
 				$('textarea#editDescription').val(res.description);
 				$('#editCategory option[value="'+res.category_id+'"]').prop('selected', true);
-				$('#displayThumbnail').attr('src', 'http://agri.me/'+res.thumbnail);
+				// $('#displayThumbnail').attr('src', 'http://agri.me/'+res.thumbnail);
 			},
 			error: function(xhr, ajaxOptions, thrownError){
 				toastr['error']('Can\'t display Product to edit');
@@ -439,16 +441,16 @@
 			success: function(res){
 				console.log(res);
 				$('#modalShow').modal('show');
-				// $('#product_name').text(res.name);
-				// $('#show-name').text(res.name);
-				// $('#show-category-name').text(res.category.name);
-				// $('#show-description').text(res.description);
+				$('#product_name').text(res.name);
+				$('#show-name').text(res.name);
+				$('#show-category-name').text(res.category.name);
+				$('#show-description').html(res.description);
 				// $('#show-content').text(res.content);
-				// $('#show-discount').text(res.discount+ " %");
-				// $('#show-price').text(res.price+ "VNĐ");
-				// $('#show-quantity').text(res.quantity);
-				// $('#show-unit').text(res.unit);
-				// $('#show-thumbnail').attr('src', "http://agri.me/"+res.thumbnail);
+				$('#show-unit').text(res.unit);
+				$('#show-discount').text(res.discount+ " %");
+				$('#show-price').text(res.price+ "VNĐ");
+				$('#show-quantity').text(res.quantity);
+				$('#show-thumbnail').attr('src', "http://agri.me/"+res.thumbnail);
 			},
 			error: function(xhr, ajaxOptions, thrownError){
 				toastr['error']('Load Product failed');
@@ -460,25 +462,26 @@
 	$('#formUpdateProduct').on('submit', function(event){
 		event.preventDefault();
 		var id = $('#edit-id').val();
-		var thumbnail = $('#edit-thumbnail').get(0).files[0];
 		var content = CKEDITOR.instances['editContent'].getData();
 		var formData = new FormData();
-		formData.append('name', $('#edit-name').val());
-		formData.append('category_id', $('#edit-category option:selected').val());
-		formData.append('quantity', $('#edit-quantity').val());
-		formData.append('price', $('#edit-price').val());
-		formData.append('discount', $('#edit-discount').val());
+		formData.append('name', $('#editName').val());
+		formData.append('category_id', $('#editCategory option:selected').val());
+		formData.append('quantity', $('#editQuantity').val());
+		formData.append('price', $('#editPrice').val());
+		formData.append('discount', $('#editDiscount').val());
 		formData.append('content', content);
-		formData.append('description', $('#edit-description').val());
-		formData.append('thumbnail', thumbnail);
+		formData.append('description', $('#editDescription').val());
+		// alert($('#editName').val());
 		$.ajax({
 			url: '{{ asset('') }}farmer/product/update/'+id,
-			type: 'PUT',
-			data:formData,
+			type: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,			
 			success: function(res){
+				console.log(res);
 				$('#modalEdit').modal('hide');
 				var row = document.getElementById('row-'+res.id);
-				console.log(res);
 				row.remove();
 				toastr['success']('Update Product: '+res.name+' successfully!');
 				$('#tableProduct').prepend('<tr id="row-'+res.id+'" role="row"><td>'+res.id+'</td><td><img src="http://agri.me/'+res.thumbnail+'" height="80px"></td><td>'+res.name+'</td><td>'+res.category_name+'</td><td>'+res.quantity+'</td><td>'+res.price+'</td><td>'+res.updated_at+'</td><td><a title="Detail" class="btn btn-info fa fa-eye btn-sm  btnShow" data-id="'+res.id+'" id="row-'+res.id+'"></a>&nbsp;<a title="Edit" class="btn btn-warning btn-sm fa fa-pencil btnEdit" data-id="'+res.id+'"></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm fa fa-trash-o btnDelete" data-id="'+res.id+'"></a></td></tr>');				

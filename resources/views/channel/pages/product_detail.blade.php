@@ -1,448 +1,149 @@
 @extends('channel.layouts.master')
-@section('header')
-@include('channel.layouts.header')
+@section('css')
+@include('channel.layouts.css') 
+<link rel="stylesheet" href="{{ asset('admins/bower_components/font-awesome/css/font-awesome.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('shop/plugins/jquery-ui-1.12.1.custom/jquery-ui.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('shop/styles/single_styles.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('shop/styles/single_responsive.css') }}"> 
+<link rel="stylesheet" href="{{ asset('admins/bower_components/bootstrapv4.0/css/bootstrap.min.css') }}">
+@endsection
+
+@section('navigation')
+@include('channel.layouts.navigation')
 @endsection
 
 @section('content')
-<!-- Product Detail -->
-<div class="container bgwhite p-t-35 p-b-80">
-	<div class="flex-w flex-sb">
-		<div class="w-size13 p-t-30 respon5">
-			<div class="wrap-slick3 flex-sb flex-w">
-				<div class="wrap-slick3-dots"></div>
+<div class="container single_product_container" style="padding-bottom: 0px">
+    <div class="row">
+        <div class="col">
 
-				<div class="slick3">
-					<div class="item-slick3" data-thumb="images/thumb-item-01.jpg">
-						<div class="wrap-pic-w">
-							<img src="images/product-detail-01.jpg" alt="IMG-PRODUCT">
-						</div>
-					</div>
+            <!-- Breadcrumbs -->
 
-					<div class="item-slick3" data-thumb="images/thumb-item-02.jpg">
-						<div class="wrap-pic-w">
-							<img src="images/product-detail-02.jpg" alt="IMG-PRODUCT">
-						</div>
-					</div>
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a href="">Nông sản</a></li>
+                    <li><a href=""><i class="fa fa-angle-right" aria-hidden="true"></i>Chi tiết nông sản</a></li>
+                </ul>
+            </div>
 
-					<div class="item-slick3" data-thumb="images/thumb-item-03.jpg">
-						<div class="wrap-pic-w">
-							<img src="images/product-detail-03.jpg" alt="IMG-PRODUCT">
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+        </div>
+    </div>
 
-		<div class="w-size14 p-t-30 respon5">
-			<h4 class="product-detail-name m-text16 p-b-13">
-				Boxy T-Shirt with Roll Sleeve Detail
-			</h4>
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="single_product_pics">
+                <div class="row">
+                    <div class="col-lg-3 thumbnails_col order-lg-1 order-2">
+                        <div class="single_product_thumbnails">
+                            <ul>
+                                <li><img src="{{ asset('') }}{{$product->thumbnail}}" alt="" data-image="images/single_1.jpg"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 image_col order-lg-2 order-1">
+                        <div class="single_product_image">
+                            <div class="single_product_image_background" style="background-image:url({{ asset('') }}{{$product->thumbnail}}); height: 400px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="product_details">
+                <div class="product_details_title">
+                    <h2>{{$product->name}}</h2>
+                    <p></p>
+                    <p class="text-justify">{{$product->description}}</p>
+                </div>
+                <div class="original_price">@if ($product->discount>0)
+                    {{$product->price}} VNĐ
+                @endif</div>
+                <div class="product_price">{{$product->price*(100-$product->discount)/100 }} VNĐ</div>
+                {{-- <ul class="star_rating">
+                    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                    <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                    <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+                </ul> --}}
+                <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
+                    <span>Quantity:</span>
+                    <div class="quantity_selector">
+                        <span class="minus"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                        <span id="quantity_value">10</span>{{$product->unit}}
+                        <span class="plus"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                    </div>
+                    <div class="red_button add_to_cart_button"><a class="btnAddCart" data-id="{{$product->id}}">add to cart</a></div>
+                    {{-- <div class="product_favorite d-flex flex-column align-items-center justify-content-center"></div> --}}
+                </div>
+            </div>
+        </div>
+    </div>
 
-			<span class="m-text17">
-				$22
-			</span>
-
-			<p class="s-text8 p-t-10">
-				Nulla eget sem vitae eros pharetra viverra. Nam vitae luctus ligula. Mauris consequat ornare feugiat.
-			</p>
-
-			<!--  -->
-			<div class="p-t-33 p-b-60">
-				<div class="flex-m flex-w p-b-10">
-					<div class="s-text15 w-size15 t-center">
-						Size
-					</div>
-
-					<div class="rs2-select2 rs3-select2 bo4 of-hidden w-size16">
-						<select class="selection-2" name="size">
-							<option>Choose an option</option>
-							<option>Size S</option>
-							<option>Size M</option>
-							<option>Size L</option>
-							<option>Size XL</option>
-						</select>
-					</div>
-				</div>
-
-				<div class="flex-m flex-w">
-					<div class="s-text15 w-size15 t-center">
-						Color
-					</div>
-
-					<div class="rs2-select2 rs3-select2 bo4 of-hidden w-size16">
-						<select class="selection-2" name="color">
-							<option>Choose an option</option>
-							<option>Gray</option>
-							<option>Red</option>
-							<option>Black</option>
-							<option>Blue</option>
-						</select>
-					</div>
-				</div>
-
-				<div class="flex-r-m flex-w p-t-10">
-					<div class="w-size16 flex-m flex-w">
-						<div class="flex-w bo5 of-hidden m-r-22 m-t-10 m-b-10">
-							<button class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
-								<i class="fs-12 fa fa-minus" aria-hidden="true"></i>
-							</button>
-
-							<input class="size8 m-text18 t-center num-product" type="number" name="num-product" value="1">
-
-							<button class="btn-num-product-up color1 flex-c-m size7 bg8 eff2">
-								<i class="fs-12 fa fa-plus" aria-hidden="true"></i>
-							</button>
-						</div>
-
-						<div class="btn-addcart-product-detail size9 trans-0-4 m-t-10 m-b-10">
-							<!-- Button -->
-							<button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
-								Add to Cart
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="p-b-45">
-				<span class="s-text8 m-r-35">SKU: MUG-01</span>
-				<span class="s-text8">Categories: Mug, Design</span>
-			</div>
-
-			<!--  -->
-			<div class="wrap-dropdown-content bo6 p-t-15 p-b-14 active-dropdown-content">
-				<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
-					Description
-					<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
-					<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
-				</h5>
-
-				<div class="dropdown-content dis-none p-t-15 p-b-23">
-					<p class="s-text8">
-						Fusce ornare mi vel risus porttitor dignissim. Nunc eget risus at ipsum blandit ornare vel sed velit. Proin gravida arcu nisl, a dignissim mauris placerat
-					</p>
-				</div>
-			</div>
-
-			<div class="wrap-dropdown-content bo7 p-t-15 p-b-14">
-				<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
-					Additional information
-					<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
-					<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
-				</h5>
-
-				<div class="dropdown-content dis-none p-t-15 p-b-23">
-					<p class="s-text8">
-						Fusce ornare mi vel risus porttitor dignissim. Nunc eget risus at ipsum blandit ornare vel sed velit. Proin gravida arcu nisl, a dignissim mauris placerat
-					</p>
-				</div>
-			</div>
-
-			<div class="wrap-dropdown-content bo7 p-t-15 p-b-14">
-				<h5 class="js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
-					Reviews (0)
-					<i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
-					<i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
-				</h5>
-
-				<div class="dropdown-content dis-none p-t-15 p-b-23">
-					<p class="s-text8">
-						Fusce ornare mi vel risus porttitor dignissim. Nunc eget risus at ipsum blandit ornare vel sed velit. Proin gravida arcu nisl, a dignissim mauris placerat
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
 </div>
 
+<!-- Tabs -->
 
-<!-- Relate Product -->
-<section class="relateproduct bgwhite p-t-45 p-b-138">
-	<div class="container">
-		<div class="sec-title p-b-60">
-			<h3 class="m-text5 t-center">
-				Related Products
-			</h3>
-		</div>
+<div class="tabs_section_container">
 
-		<!-- Slide2 -->
-		<div class="wrap-slick2">
-			<div class="slick2">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="tabs_container">
+                    <ul class="tabs d-flex flex-sm-row flex-column align-items-left align-items-md-center justify-content-center">
+                        <li class="tab active" data-active-tab="tab_1"><span>Nông dân</span></li>
+                        <li class="tab" data-active-tab="tab_2"><span>Thông tin bổ sung</span></li>
+                        <li class="tab" data-active-tab="tab_3"><span>Đánh giá</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
 
-				<div class="item-slick2 p-l-15 p-r-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelnew">
-							<img src="images/item-02.jpg" alt="IMG-PRODUCT">
+                <!-- Tab Description -->
+                <div id="tab_1" class="tab_container active">
+                    <div class="row">
+                        <div class="col-lg-10 desc_col">
+                            <div class="tab_title">
+                                <h4>Nông dân</h4>
+                            </div>
+                            <div class="tab_text_block">
+                                <h4>{{$product->farmer->name}}</h4>
+                                <p>Địa chỉ liên hệ: {{$product->farmer_contact->address}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tab Additional Info -->
 
-							<div class="block2-overlay trans-0-4">
-								<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-									<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-									<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-								</a>
+                <div id="tab_2" class="tab_container">
+                    <div class="row">
+                        <div class="col additional_info_col">
+                            <div class="tab_title additional_info_title">
+                                <h4>Thông tin bổ sung</h4>
+                            </div>
+                            <p>Ngày chế biến, nhập kho:<span>{{$product->created_at}}</span></p>
+                            <p>Số lượng hiện còn:<span> {{$product->quantity}} {{$product->unit}}</span></p>
+                        </div>
+                    </div>
+                </div>
 
-								<div class="block2-btn-addcart w-size1 trans-0-4">
-									<!-- Button -->
-									<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-										Add to Cart
-									</button>
-								</div>
-							</div>
-						</div>
+                <!-- Tab Reviews -->
 
-						<div class="block2-txt p-t-20">
-							<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-								Herschel supply co 25l
-							</a>
+                <div id="tab_3" class="tab_container">
+                </div>
 
-							<span class="block2-price m-text6 p-r-5">
-								$75.00
-							</span>
-						</div>
-					</div>
-				</div>
+            </div>
+        </div>
+    </div>
 
-				<div class="item-slick2 p-l-15 p-r-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-img wrap-pic-w of-hidden pos-relative">
-							<img src="images/item-03.jpg" alt="IMG-PRODUCT">
+</div>
+@endsection
 
-							<div class="block2-overlay trans-0-4">
-								<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-									<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-									<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-								</a>
 
-								<div class="block2-btn-addcart w-size1 trans-0-4">
-									<!-- Button -->
-									<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-										Add to Cart
-									</button>
-								</div>
-							</div>
-						</div>
-
-						<div class="block2-txt p-t-20">
-							<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-								Denim jacket blue
-							</a>
-
-							<span class="block2-price m-text6 p-r-5">
-								$92.50
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-img wrap-pic-w of-hidden pos-relative">
-							<img src="images/item-05.jpg" alt="IMG-PRODUCT">
-
-							<div class="block2-overlay trans-0-4">
-								<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-									<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-									<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-								</a>
-
-								<div class="block2-btn-addcart w-size1 trans-0-4">
-									<!-- Button -->
-									<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-										Add to Cart
-									</button>
-								</div>
-							</div>
-						</div>
-
-						<div class="block2-txt p-t-20">
-							<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-								Coach slim easton black
-							</a>
-
-							<span class="block2-price m-text6 p-r-5">
-								$165.90
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelsale">
-							<img src="images/item-07.jpg" alt="IMG-PRODUCT">
-
-							<div class="block2-overlay trans-0-4">
-								<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-									<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-									<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-								</a>
-
-								<div class="block2-btn-addcart w-size1 trans-0-4">
-									<!-- Button -->
-									<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-										Add to Cart
-									</button>
-								</div>
-							</div>
-						</div>
-
-						<div class="block2-txt p-t-20">
-							<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-								Frayed denim shorts
-							</a>
-
-							<span class="block2-oldprice m-text7 p-r-5">
-								$29.50
-							</span>
-
-							<span class="block2-newprice m-text8 p-r-5">
-								$15.90
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelnew">
-							<img src="images/item-02.jpg" alt="IMG-PRODUCT">
-
-							<div class="block2-overlay trans-0-4">
-								<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-									<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-									<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-								</a>
-
-								<div class="block2-btn-addcart w-size1 trans-0-4">
-									<!-- Button -->
-									<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-										Add to Cart
-									</button>
-								</div>
-							</div>
-						</div>
-
-						<div class="block2-txt p-t-20">
-							<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-								Herschel supply co 25l
-							</a>
-
-							<span class="block2-price m-text6 p-r-5">
-								$75.00
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-img wrap-pic-w of-hidden pos-relative">
-							<img src="images/item-03.jpg" alt="IMG-PRODUCT">
-
-							<div class="block2-overlay trans-0-4">
-								<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-									<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-									<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-								</a>
-
-								<div class="block2-btn-addcart w-size1 trans-0-4">
-									<!-- Button -->
-									<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-										Add to Cart
-									</button>
-								</div>
-							</div>
-						</div>
-
-						<div class="block2-txt p-t-20">
-							<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-								Denim jacket blue
-							</a>
-
-							<span class="block2-price m-text6 p-r-5">
-								$92.50
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-img wrap-pic-w of-hidden pos-relative">
-							<img src="images/item-05.jpg" alt="IMG-PRODUCT">
-
-							<div class="block2-overlay trans-0-4">
-								<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-									<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-									<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-								</a>
-
-								<div class="block2-btn-addcart w-size1 trans-0-4">
-									<!-- Button -->
-									<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-										Add to Cart
-									</button>
-								</div>
-							</div>
-						</div>
-
-						<div class="block2-txt p-t-20">
-							<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-								Coach slim easton black
-							</a>
-
-							<span class="block2-price m-text6 p-r-5">
-								$165.90
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelsale">
-							<img src="images/item-07.jpg" alt="IMG-PRODUCT">
-
-							<div class="block2-overlay trans-0-4">
-								<a href="#" class="block2-btn-addwishlist hov-pointer trans-0-4">
-									<i class="icon-wishlist icon_heart_alt" aria-hidden="true"></i>
-									<i class="icon-wishlist icon_heart dis-none" aria-hidden="true"></i>
-								</a>
-
-								<div class="block2-btn-addcart w-size1 trans-0-4">
-									<!-- Button -->
-									<button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-										Add to Cart
-									</button>
-								</div>
-							</div>
-						</div>
-
-						<div class="block2-txt p-t-20">
-							<a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
-								Frayed denim shorts
-							</a>
-
-							<span class="block2-oldprice m-text7 p-r-5">
-								$29.50
-							</span>
-
-							<span class="block2-newprice m-text8 p-r-5">
-								$15.90
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-	</div>
-</section>
+@section('js')
+@include('channel.layouts.js')
+<script src="{{ asset('shop/plugins/jquery-ui-1.12.1.custom/jquery-ui.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+<script src="{{ asset('shop/js/single_custom.js') }}" type="text/javascript" charset="utf-8" async defer></script>
 @endsection

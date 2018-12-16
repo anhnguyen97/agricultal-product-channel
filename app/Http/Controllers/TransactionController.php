@@ -35,7 +35,7 @@ class TransactionController extends Controller
         $trans_list = Transaction::where([['farmer_id', $farmerID],['farmer_delete',0]])->get();
         return Datatables::of($trans_list)
         ->addColumn('action', function ($transaction) {
-            return '<a title="Detail" href="http://agri.me/farmer/transaction/'.$transaction['id'].'" class="btn btn-info btn-sm fa fa-eye btnShow" data-id="'.$transaction["id"].'" id="row-'.$transaction["id"].'"></a>&nbsp;<a title="Update" class="btn btn-warning btn-sm fa fa-pencil btnUpdate" data-id='.$transaction["id"].'></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm fa fa-trash-o btnDelete" data-id='.$transaction["id"].'></a>';
+            return '<a title="Detail" href="http://agri.me/farmer/transaction/'.$transaction['id'].'" class="btn btn-info btn-sm fa fa-eye btnShow" data-id="'.$transaction["id"].'" id="row-'.$transaction["id"].'"></a>&nbsp;<a title="Update" class="btn btn-warning btn-sm fa fa-pencil btnEdit" data-id='.$transaction["id"].'></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm fa fa-trash-o btnDelete" data-id='.$transaction["id"].'></a>';
         })
         ->editColumn('trader_id', function($transaction){ 
             $trader = User::find($transaction->trader_id);
@@ -48,7 +48,7 @@ class TransactionController extends Controller
             return $transaction->updated_at->format('H:i:s d/m/Y');
         })
         ->editColumn('total', function($transaction){
-            return number_format($transaction->total, 2);
+            return number_format($transaction->total, 3);
         })
         ->setRowId(function ($transaction) {
             return 'row-'.$transaction->id;
@@ -95,6 +95,29 @@ class TransactionController extends Controller
             return 'row-'.$product->id;
         })
         ->make(true);
+    }
+
+    public function farmerEdit($id)
+    {
+        return Transaction::find($id);
+    }
+
+    public function farmerUpdate(Request $request, $id)
+    {
+        $data = $request->all();
+        if ($request->status == 1 && $request->payment==0 ) {
+            return response()->json(['error' => 'Giao dịch chỉ hoàn thành khi đã được thanh toán'], 200);
+        }
+        $update =  Transaction::where('id', $id)->update($data);
+        if ($update ==1)    {
+            $transaction =  Transaction::find($id);
+            $trader = User::where('id', $transaction->trader_id)->first();
+            $transaction['trader'] = $trader['name'];
+            $transaction['status'] = $transaction['status']==1? 'Đã hoàn thành': "Đang xử lý";
+            $transaction['payment'] = $transaction['payment']==1? 'Đã thanh toán': "Chưa thanh toán";
+            return $transaction; 
+        } 
+        return $response()->json([], 400);
     }
 
     /**
@@ -290,5 +313,136 @@ class TransactionController extends Controller
             return 'row-'.$product->id;
         })
         ->make(true);
+    }
+
+    //SHOPPING CART
+    public function addCart($id)
+    {
+        $product = Product::find($id);
+        $rows = \Cart::content();
+        /**
+         * $rows : COLLECTION type
+         * $cartItem: call item in Collection
+         * $rowId: field returned, use($id): using $id to be parameter
+         * @var [type]
+         */
+        $rowId = $rows->search(function($cartItem, $rowId) use($id) {
+            return ($cartItem->id == $id);
+        });   
+        if ($rowId!=false) {  
+            
+            $item = \Cart::get($rowId);
+            
+            return \Cart::update($rowId, $item->qty+1);
+        } else {
+            return \Cart::add($id, $product['name'], 1, $product['price'], ['thumbnail' => $product['thumbnail'],
+                'discount' => $product['discount'], 'unit' => $product['unit'],
+            ]);
+        }  
+
+    }
+
+    /**
+     * get list product
+     * @return [type] [description]
+     */
+    public function getCart()
+    {
+        $list = \Cart::content();
+        // dd($list);s
+        return view('channel.pages.cart',[
+            'list'=>\Cart::content(),
+            'count' => \Cart::count(),
+            'total' => \Cart::total(),
+            'tax' => \Cart::tax(),
+        ]);
+    }
+
+    /**
+     * increase quantity of food/ drink
+     * @param  Request $request [description]
+     * @return food/drink has been updated
+     */
+    public function increase($rowId)
+    {       
+        $item = \Cart::get($rowId); 
+        $product = Product::find($item->id);    
+        return array(
+            'item'=> \Cart::update($rowId,  [
+                'qty'=>$item->qty+1,
+                'thumbnail' => $product['thumbnail'],
+                'discount' =>$product['discount']
+            ]),
+            'total'=> \Cart::total(),
+            'tax' =>\Cart::tax()
+        );
+    }
+
+    /**
+     * decrease quantity of food/ drink
+     * @param  Request $request [description]
+     * @return food/drink has been updated
+     */
+    public function decrease($rowId)
+    {       
+        $item = \Cart::get($rowId);
+        if ($item->qty==1) {
+            return array(
+                'item'=>\Cart::remove($rowId),
+                'total' => \Cart::total(),
+                'tax' => \Cart::tax(),
+            );
+        } else {
+            $product = Product::find($item->id);    
+            return array(
+                'item'=> \Cart::update($rowId,  [
+                    'qty'=>$item->qty-1,
+                    'thumbnail' => $product['thumbnail'],
+                    'origin_price' =>$product['origin_price']
+                ]),
+                'total'=> \Cart::total(),
+                'tax' =>\Cart::tax()
+            );
+        }       
+    }
+
+    /**
+     * save booking 's information to db'
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function pay(Request $request)
+    {
+        // \Cart::destroy();
+        $data = $request->all();
+        $date = date('YmdHis', time());
+        $data['username'] = $date.str_slug($request->name);
+        // $receiver = Contact::create($data);       
+        
+        $rows = \Cart::content();
+        // dd($rows);
+        if ($rows->count()==0) {        
+        } else {
+            $list_farmer = array();
+            foreach ($rows as $item) {
+                $farmer_id = Product::where('id', $item->id)->select('farmer_id');
+                dd($farmer_id);
+                if (!array_has($list_farmer, $item->id)) {
+                    array_add($list_farmer, $item->id, $farmer_id);
+                }
+            }
+            dd($list_farmer);
+            foreach ($rows as $item) {
+                $data =[
+                    'booking_id' => $booking['id'],
+                    'product_id' => $item->id,
+                    'quantity' => $item->qty,
+                    'price' => $item->price,
+                ];
+                BookingDetails::create($data);
+            }
+        }
+        \Cart::destroy();
+        return redirect()->route('channel.home');
     }
 }

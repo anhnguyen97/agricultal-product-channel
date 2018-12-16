@@ -14,7 +14,7 @@ class Contact extends Model
      * @var array
      */
     protected $fillable = [
-        'mobile', 'address', 'username'
+        'mobile', 'address', 'username', 'name'
     ];
 
     protected $table = 'contacts';
