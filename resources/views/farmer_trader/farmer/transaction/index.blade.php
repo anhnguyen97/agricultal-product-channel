@@ -79,6 +79,7 @@
 						<select name="edit-status" class="form-control" id="edit-status">
 							<option value="1">Đã hoàn thành</option>
 							<option value="0">Đang xử lý</option>
+							<option value="2">Đã xử lý/ Đang giao hàng</option>
 						</select>
 					</div>	
 					<div class="modal-footer">
@@ -145,6 +146,8 @@
 			{ data: 'status', name: 'status', render: function(data, type, full, meta){
 				if (data == 1) {
 					return 'Đã hoàn thành';
+				} else if(data == 2) {
+					return 'Đã xử lý/ Đang giao hàng';
 				} else {
 					return 'Đang xử lý';
 				}

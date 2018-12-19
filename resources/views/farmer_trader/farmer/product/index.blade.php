@@ -77,19 +77,19 @@
 					<div class="form-group row">
 						<label for="inputName" class="col-sm-2 form-control-label">Name</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="inputName" placeholder="Name">
+							<input type="text" class="form-control" id="inputName" placeholder="Name" required>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="inputDescription" class="col-sm-2 form-control-label">Description</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="inputDescription">
+							<input type="text" class="form-control" id="inputDescription" required>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="inputContent" class="col-sm-2 form-control-label">Content</label>
 						<div class="col-sm-10">
-							<textarea type="text" class="form-control" id="inputContent" name="inputContent"></textarea> 
+							<textarea type="text" class="form-control" id="inputContent" name="inputContent" required></textarea> 
 						</div>
 					</div>
 					<div class="form-group row">
@@ -110,7 +110,7 @@
 									<span class="input-group-text">Upload</span>
 								</div>
 								<div class="custom-file">
-									<input type="file" class="custom-file-input" id="inputThumbnail" aria-describedby="inputThumbnail">
+									<input type="file" class="custom-file-input" id="inputThumbnail" aria-describedby="inputThumbnail" required>
 									<label class="custom-file-label" for="inputThumbnails">Choose file</label>
 								</div>
 							</div>
@@ -119,7 +119,7 @@
 					<div class="form-group row">
 						<label for="inputQuantity" class="col-sm-2 form-control-label">Quantity</label>
 						<div class="col-sm-10">
-							<input type="number" class="form-control" id="inputQuantity">
+							<input type="number" class="form-control" id="inputQuantity" required>
 						</div>
 					</div>
 					<div class="form-group row">
@@ -127,7 +127,7 @@
 						<div class="col-sm-10">
 							{{-- <input type="number" class="form-control" id="inputQuantity"> --}}
 							<div class="input-group">
-								<input type="number"  id="inputPrice" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+								<input type="number"  id="inputPrice" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" required>
 								<div class="input-group-append">
 									<span class="input-group-text">VNĐ</span>
 									<span class="input-group-text">0.00</span>
@@ -140,7 +140,7 @@
 						<div class="col-sm-10">
 							{{-- <input type="number" class="form-control" id="inputDiscount"> --}}							
 							<div class="input-group">
-								<input type="number" id="inputDiscount" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+								<input type="number" id="inputDiscount" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" required>
 								<div class="input-group-append">
 									{{-- <span class="input-group-text">VNĐ</span> --}}
 									<span class="input-group-text">%</span>

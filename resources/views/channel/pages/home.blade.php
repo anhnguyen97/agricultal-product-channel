@@ -4,11 +4,11 @@
 		<b class="text-uppercase">Danh mục nông sản</b>
 	</div>
 	<div class="row mx-auto my-auto" style="margin-top: -20px;">
-		<div id="recipeCarousel" class="carousel slide w-100" data-ride="carousel">
-			<div class="carousel-inner w-100" role="listbox">
+		{{-- <div id="recipeCarousel" class="carousel slide w-100" data-ride="carousel">
+			<div class="carousel-inner" role="listbox">
 				@foreach ($allCategory as $key => $element)
-				<div class="carousel-item @if ($key == 1) active @endif">
-					<img class="d-block col-3 img-fluid" src="{{ asset('') }}storage/sliders/2.jpg">
+				<div class="carousel-item @if ($key == 3) active @endif">
+					<img class="d-block col-3 img-fluid" src="{{ asset('') }}storage/sliders/2.jpg" >
 				</div>
 				@endforeach
 
@@ -21,7 +21,12 @@
 				<span class="carousel-control-next-icon" aria-hidden="true"></span>
 				<span class="sr-only">Next</span>
 			</a>
-		</div>
+		</div> --}}
+		@foreach ($allCategory as $key => $element)
+		<button type="button" class="btn @if ($key/3==1) btn-warning @elseif ($key/3==2) btn-info @else btn-success @endif " style="margin:5px 10px ">
+			{{$element->name}} <span class="badge badge-light"></span>
+		</button>
+		@endforeach
 	</div>	
 </div>
 

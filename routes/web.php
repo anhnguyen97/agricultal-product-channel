@@ -127,6 +127,15 @@ Route::middleware('auth')->group(function(){
 
 			Route::delete('delete/{id}', 'TransactionController@farmerDestroy');			
 		});
+
+		Route::group(['prefix' => 'statistical'], function() {
+		    Route::get('product', 'StatisticalController@getProductPage');
+		    Route::post('product', 'StatisticalController@getProductStatistical')->name('farmer.statistical.product');
+		    Route::get('transaction', 'StatisticalController@getTransactionPage');
+		    Route::post('transaction', 'StatisticalController@getTransactionStatistical')->name('farmer.statistical.transaction');
+		    Route::get('sales', 'StatisticalController@getSalesPage');
+		    Route::post('sales', 'StatisticalController@getSalesStatistical')->name('farmer.statistical.sales');
+		});
 	});
 
 	//TRADER
@@ -139,8 +148,8 @@ Route::middleware('auth')->group(function(){
 			Route::post('store', 'ProductController@store')->name('trader.product.store');
 			Route::delete('delete/{id}', 'ProductController@destroy');
 			Route::get('edit/{id}', 'ProductController@edit');
-			Route::put('update/{id}', 'ProductController@update');
-			Route::get('show_pro/{$id}', 'ProductController@show');
+			Route::post('update/{id}', 'ProductController@update');
+			Route::get('show_pro/{id}', 'ProductController@show');
 		});	
 
 		Route::group(['prefix' => 'transaction'], function() {
@@ -155,6 +164,9 @@ Route::middleware('auth')->group(function(){
 
 			Route::get('export/{id}', 'TransactionController@traderTranExportDetail');
 			// Route::get('export_detail/getData/{tran_id}', 'TransactionController@traderGetTranImportDetail')->name('trader.transDetail.getData');
+			
+			Route::get('edit/{id}', 'TransactionController@traderEditExTran');
+			Route::post('update/{id}', 'TransactionController@traderUpdateExTran');
 
 			Route::delete('delete/{id}', 'TransactionController@traderDestroy');			
 		});
@@ -167,6 +179,15 @@ Route::middleware('auth')->group(function(){
 
 		Route::get('cart', 'TransactionController@getCart');
 		Route::post('pay', 'TransactionController@pay');
+
+		Route::group(['prefix' => 'statistical'], function() {
+		    Route::get('product', 'StatisticalController@getTraderProductPage');
+		    Route::post('product', 'StatisticalController@getTraderProductStatistical')->name('trader.statistical.product');
+		    Route::get('transaction', 'StatisticalController@getTraderTransactionPage');
+		    Route::post('transaction', 'StatisticalController@getTraderTransactionStatistical')->name('trader.statistical.transaction');
+		    Route::get('sales', 'StatisticalController@getTraderSalesPage');
+		    Route::post('sales', 'StatisticalController@getTraderSalesStatistical')->name('trader.statistical.sales');
+		});
 		
 	});
 	

@@ -9,7 +9,7 @@ class Transaction extends Model
 	protected $table = 'transactions';
 
 	protected $fillable = [
-		'farmer_id', 'trader_id', 'receiver_contact_id', 'transaction_detail_id', 'status', 'payment', 'typeTran', 'total', 'farmer_delete', 'trader_delete',
+		'farmer_id', 'trader_id', 'contact_id', 'status', 'payment', 'typeTran', 'total', 'farmer_delete', 'trader_delete',
 	]; 
 
 	public function transaction_detail()

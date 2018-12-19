@@ -115,7 +115,7 @@
 					Thông tin chi tiết đơn hàng
 				</a>
 				<div class="collapse" id="collapseTranDetail">
-					<input type="hidden" name="tran_detail_id" id="tran_detail_id" value="{{$trans_info->transaction_detail_id}}">
+					<input type="hidden" name="tran_id" id="tran_id" value="{{$trans_info->id}}">
 					<table id="tableTranDetail" class="table table-bordered text-center tableTranDetail" >
 						<thead style="width: 100%">
 							<tr>
@@ -174,7 +174,7 @@
 	});
 
 	$(function () {
-		var id = $('#tran_detail_id').val();
+		var id = $('#tran_id').val();
 		$('#tableTranDetail').DataTable({
 			processing: true,
 			serverSide: true,
@@ -182,7 +182,7 @@
 			ajax: {
 				"url": "{{ asset('') }}farmer/transaction/detail/getData/"+id,
 				"data":{
-					"tran_detail_id": $('#tran_detail_id').val(),
+					"tran_id": $('#tran_id').val(),
 				},
 			},
 			columns: [

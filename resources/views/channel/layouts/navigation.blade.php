@@ -63,7 +63,14 @@
                             <li><a href="{{ route('channel.index') }}">Trang chủ</a></li>
                             <li><a href="{{ route('farmer.product') }}">QL Nông sản</a></li>
                             <li><a href="{{ route('farmer.transaction') }}">QL Giao dịch</a></li>
-                            <li><a href="#">Thống kê</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown"  href="#" id="navbarDropdown"> Thống kê</a>
+                                <ul id="navbarDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li class="dropdown-item"><a href="{{ asset('') }}farmer/statistical/product">Nông sản</a></li>
+                                    <li class="dropdown-item"><a href="{{ asset('') }}farmer/statistical/transaction">Giao dịch</a></li>
+                                    <li class="dropdown-item"><a href="{{ asset('') }}farmer/statistical/sales">Doanh số</a></li>
+                                </ul>
+                            </li>
                         </ul>
                         <ul class="navbar_user" style="margin-bottom: 0px">
                             <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
@@ -79,7 +86,14 @@
                                     <li class="dropdown-item"><a href="{{ route('trader.transaction.import') }}">Nhập hàng</a></li>
                                 </ul>
                             </li>
-                            <li><a href="#">Thống kê</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown"  href="#" id="navbarDropdown"> Thống kê</a>
+                                <ul id="navbarDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li class="dropdown-item"><a href="{{ asset('') }}trader/statistical/product">Nông sản</a></li>
+                                    <li class="dropdown-item"><a href="{{ asset('') }}trader/statistical/transaction">Giao dịch</a></li>
+                                    <li class="dropdown-item"><a href="{{ asset('') }}trader/statistical/sales">Doanh số</a></li>
+                                </ul>
+                            </li>
                         </ul>
                         <ul class="navbar_user" style="margin-bottom: 0px">
                             <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>

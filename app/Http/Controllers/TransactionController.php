@@ -10,6 +10,7 @@ use App\Product;
 use App\TransactionDetail;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -108,12 +109,46 @@ class TransactionController extends Controller
         if ($request->status == 1 && $request->payment==0 ) {
             return response()->json(['error' => 'Giao dịch chỉ hoàn thành khi đã được thanh toán'], 200);
         }
+        $transaction =  Transaction::find($id);
+        // $trader = User::where('id', $transaction->trader_id)->first();
+
+        if ($request->status == 1 && $request->payment == 1) {
+            $transaction_detail_list = TransactionDetail::where('transaction_id', $id)->get();
+            foreach ($transaction_detail_list as $key => $transaction_detail) {
+                $product = Product::where([
+                    ['id', '=', $transaction_detail->product_id],
+                    ['farmer_id', '=', $transaction->farmer_id]
+                ])->first()->toArray();
+                //Update số lượng của nông dân
+                Product::find($product['id'])->update(['quantity' => ($product['quantity'] - $transaction_detail->quantity )]);
+                //Update số lượng của thương lái
+                //Kiểm tra thương lái có nông sản này không, nếu không thì tạo mới, ngược lại update
+                $pro_trader = Product::where([
+                    ['name', '=', $product['name']],
+                    ['farmer_id', '=', $transaction->trader_id]
+                ])->first();
+                if ($pro_trader) {
+                    Product::find($pro_trader['id'])->update(['quantity' => $pro_trader['quantity'] + $transaction_detail->quantity]);
+                } else {
+                    $product['quantity'] = $transaction_detail->quantity;
+                    $product['farmer_id'] = $transaction->trader_id;
+                    $product['slug'] = str_slug($product['name']).md5($product['farmer_id']);
+                    Product::create($product);
+                } 
+            }
+        }
         $update =  Transaction::where('id', $id)->update($data);
         if ($update ==1)    {
             $transaction =  Transaction::find($id);
             $trader = User::where('id', $transaction->trader_id)->first();
             $transaction['trader'] = $trader['name'];
-            $transaction['status'] = $transaction['status']==1? 'Đã hoàn thành': "Đang xử lý";
+            if ($transaction['status']==1) {
+                $transaction['status'] = 'Đã hoàn thành';
+            } else if ($transaction['status']==0){
+                $transaction['status'] = 'Đang xử lý';
+            } else {
+                $transaction['status'] = 'Đã xử lý/ Đang giao hàng';
+            }
             $transaction['payment'] = $transaction['payment']==1? 'Đã thanh toán': "Chưa thanh toán";
             return $transaction; 
         } 
@@ -163,7 +198,7 @@ class TransactionController extends Controller
         $trans_list = Transaction::where([['trader_id', $trader_id],['trader_delete',0], ['typeTran', 0]])->get();
         return Datatables::of($trans_list)
         ->addColumn('action', function ($transaction) {
-            return '<a title="Detail" href="http://agri.me/trader/transaction/import/'.$transaction['id'].'" class="btn btn-info btn-sm fa fa-eye btnShow" data-id="'.$transaction["id"].'" id="row-'.$transaction["id"].'"></a>&nbsp;<a title="Update" class="btn btn-warning btn-sm fa fa-pencil btnUpdate" data-id='.$transaction["id"].'></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm fa fa-trash-o btnDelete" data-id='.$transaction["id"].'></a>';
+            return '<a title="Detail" href="http://agri.me/trader/transaction/import/'.$transaction['id'].'" class="btn btn-info btn-sm fa fa-eye btnShow" data-id="'.$transaction["id"].'" id="row-'.$transaction["id"].'"></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm fa fa-trash-o btnDelete" data-id='.$transaction["id"].'></a>';
         })
         ->editColumn('farmer_id', function($transaction){ 
             $farmer = User::find($transaction->farmer_id);
@@ -173,7 +208,13 @@ class TransactionController extends Controller
             return $transaction->payment==1?"Đã thanh toán":"Chưa thanh toán";
         })
         ->editColumn('status', function($transaction){
-            return $transaction->status==1?"Đã hoàn thành":"Chưa xử lý";
+            if ($transaction->status==1) {
+                return  'Đã hoàn thành';
+            } else if ($transaction->status==0){
+                return  'Đang xử lý';
+            } else {
+                return  'Đã xử lý/ Đang giao hàng';
+            }
         })
         ->editColumn('created_at', function($transaction){
             return $transaction->created_at->format('H:i:s d/m/Y');
@@ -315,6 +356,47 @@ class TransactionController extends Controller
         ->make(true);
     }
 
+    public function traderEditExTran($id)
+    {
+        return Transaction::find($id);
+    }
+
+    public function traderUpdateExTran(Request $request, $id)
+    {
+        $data = $request->all();
+        if ($request->status == 1 && $request->payment==0 ) {
+            return response()->json(['error' => 'Giao dịch chỉ hoàn thành khi đã được thanh toán'], 200);
+        }
+        $transaction =  Transaction::where('id', $id)->first();
+        // $trader = User::where('id', $transaction->trader_id)->first();
+
+        if ($request->status == 1 && $request->payment == 1) {
+            $transaction_detail_list = TransactionDetail::where('transaction_id', $id)->get();
+            foreach ($transaction_detail_list as $key => $transaction_detail) {
+                $product = DB::table('products')->where('id', '=', $transaction_detail->product_id)->first();
+                //Update số lượng của thương lái
+                $qty = $product->quantity - $transaction_detail->quantity;
+                DB::table('products')->where('id', $product->id)->update(['quantity' => $qty]);
+            }
+        }
+        $update =  Transaction::where('id', $id)->update($data);
+        if ($update ==1)    {
+            $transaction =  Transaction::find($id);
+            $trader = Contact::where('id', $transaction->contact_id)->first();
+            $transaction['trader'] = $trader['name'];
+            if ($transaction['status']==1) {
+                $transaction['status'] = 'Đã hoàn thành';
+            } else if ($transaction['status']==0){
+                $transaction['status'] = 'Đang xử lý';
+            } else {
+                $transaction['status'] = 'Đã xử lý/ Đang giao hàng';
+            }
+            $transaction['payment'] = $transaction['payment']==1? 'Đã thanh toán': "Chưa thanh toán";
+            return $transaction; 
+        } 
+        return $response()->json([], 400);
+    }
+
     //SHOPPING CART
     public function addCart($id)
     {
@@ -330,13 +412,13 @@ class TransactionController extends Controller
             return ($cartItem->id == $id);
         });   
         if ($rowId!=false) {  
-            
+
             $item = \Cart::get($rowId);
             
             return \Cart::update($rowId, $item->qty+1);
         } else {
             return \Cart::add($id, $product['name'], 1, $product['price'], ['thumbnail' => $product['thumbnail'],
-                'discount' => $product['discount'], 'unit' => $product['unit'],
+                'discount' => $product['discount'], 'unit' => $product['unit'], 'farmer_id' => $product['farmer_id'],
             ]);
         }  
 
@@ -398,7 +480,7 @@ class TransactionController extends Controller
                 'item'=> \Cart::update($rowId,  [
                     'qty'=>$item->qty-1,
                     'thumbnail' => $product['thumbnail'],
-                    'origin_price' =>$product['origin_price']
+                    'discount' =>$product['discount']
                 ]),
                 'total'=> \Cart::total(),
                 'tax' =>\Cart::tax()
@@ -413,35 +495,45 @@ class TransactionController extends Controller
      */
     public function pay(Request $request)
     {
-        // \Cart::destroy();
         $data = $request->all();
         $date = date('YmdHis', time());
         $data['username'] = $date.str_slug($request->name);
-        // $receiver = Contact::create($data);       
+        $receiver = Contact::create($data);       
         
-        $rows = \Cart::content();
+        \Cart::content()->groupBy('options.farmer_id');
+
+        $rows = \Cart::content()->groupBy('options.farmer_id');
         // dd($rows);
-        if ($rows->count()==0) {        
-        } else {
-            $list_farmer = array();
-            foreach ($rows as $item) {
-                $farmer_id = Product::where('id', $item->id)->select('farmer_id');
-                dd($farmer_id);
-                if (!array_has($list_farmer, $item->id)) {
-                    array_add($list_farmer, $item->id, $farmer_id);
+        if (!$rows->count()==0) {  
+            foreach ($rows as $farmer_id => $list_product){
+                $total = 0;                
+                $transaction_detail = array();
+                foreach ($list_product as $key => $product) {
+                    $total += $product->qty*(100-$product->options->discount)/100*$product->price;
+                    $pro = array(
+                        'product_id' => $product->id,
+                        'quantity' => $product->qty,
+                        'price' => $product->price,
+                        'discount' => $product->options->discount,
+                    );
+                    $transaction_detail[] = $pro;
+                }
+                // dd($transaction_detail);
+                $transaction = array(
+                    'farmer_id' => $farmer_id,
+                    'trader_id' => Auth::id(),
+                    'contact_id' => $receiver->id,
+                    'total' => $total,
+                );
+                // dd($transaction);
+                $transaction_store = Transaction::create($transaction);
+                // dd($transaction_store);
+                foreach ($transaction_detail as $key => $transaction) {
+                    $transaction['transaction_id'] = $transaction_store->id;
+                    TransactionDetail::create($transaction);
                 }
             }
-            dd($list_farmer);
-            foreach ($rows as $item) {
-                $data =[
-                    'booking_id' => $booking['id'],
-                    'product_id' => $item->id,
-                    'quantity' => $item->qty,
-                    'price' => $item->price,
-                ];
-                BookingDetails::create($data);
-            }
-        }
+        } 
         \Cart::destroy();
         return redirect()->route('channel.home');
     }
