@@ -42,7 +42,7 @@
 				<img class="card-img-top" src="{{ asset('') }}{{$element->thumbnail}}" alt="Card image cap" style="height: 253px">
 				<div class="card-body">
 					<h5 class="card-title"><a href="{{ asset('') }}product/{{$element->slug}}" title="">{{$element->name}}</a></h5>
-					<p class="card-text">{{$element->description}} <a href="" title="More" style="color: blue" class="btnDetail"><i>Chi tiết</i></a></p>
+					<p class="card-text">{{$element->description}} <a href="{{ asset('') }}product/{{$element->slug}}" title="More" style="color: blue" class="btnDetail"><i>Chi tiết</i></a></p>
 				</div>
 				<div class="card-footer">
 					<small class="text-muted">ND: <a style="color: red" class="farmer"><i>{{$element->user->name}}</i></a></small>
@@ -60,7 +60,7 @@
 				<img class="card-img-top" src="{{ asset('') }}{{$element->thumbnail}}" alt="Card image cap" style="height: 253px">
 				<div class="card-body">
 					<h5 class="card-title"><a href="{{ asset('') }}product/{{$element->slug}}" title="">{{$element->name}}</a></h5>
-					<p class="card-text">{{$element->description}} <a href="" title="More" style="color: blue" class="btnDetail"><i>Chi tiết</i></a></p>
+					<p class="card-text">{{$element->description}} <a href="{{ asset('') }}product/{{$element->slug}}" title="More" style="color: blue" class="btnDetail"><i>Chi tiết</i></a></p>
 				</div>
 				<div class="card-footer">
 					<small class="text-muted">ND: <a style="color: red" class="farmer"><i>{{$element->user->name}}</i></a></small>

@@ -27,7 +27,9 @@
     <!--===============================================================================================-->
 </head>
 <body>
-
+    @if(isset($error))
+    <div class="alert alert-success" role="alert">{{ $error }}</div>
+    @endif
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30">
@@ -58,9 +60,12 @@
                             <span class="lnr lnr-lock"></span>
                         </span>
                     </div>
-                    @if ($errors->has('password'))
+                    {{-- @if ($errors->has('password')) --}}
+                    
+                    @if (Session::has('error'))
                     <span class="invalid-feedback" role="alert">
-                        <strong>{{ $errors->first('password') }}</strong>
+                        {{-- <strong>{{ $errors->first('password') }}</strong> --}}
+                        <strong>{{ Session::get('error') }}</strong>
                     </span>
                     @endif
 
@@ -111,8 +116,6 @@
             </div>
         </div>
     </div>
-
-
 
 
     <!--===============================================================================================-->  

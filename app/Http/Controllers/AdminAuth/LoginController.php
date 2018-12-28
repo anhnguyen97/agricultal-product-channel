@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminAuth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 
@@ -90,6 +91,8 @@ class LoginController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         //$this->incrementLoginAttempts($request);
 
+        // Session()->put('error', 'Email hoặc mật khẩu không đúng');
+        // dd(Session::has('error'));
         return redirect()->back()->withInput($request->only('email', 'remember'));
     }
 

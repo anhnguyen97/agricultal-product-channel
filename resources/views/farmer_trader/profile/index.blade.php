@@ -103,25 +103,25 @@
 					<div class="form-group row">
 						<label for="name" class="col-sm-2 form-control-label">Name</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="name" name="name" value="{{$account->name}}">
+							<input type="text" class="form-control" id="name" name="name" value="{{$account->name}}" required>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="mobile" class="col-sm-2 form-control-label">Mobile</label>
 						<div class="col-sm-10">
-							<input type="number" class="form-control" id="mobile" name="mobile" value="{{$account->contact->mobile}}">
+							<input type="number" class="form-control" id="mobile" name="mobile" value="{{$account->contact->mobile}}" required>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="email" class="col-sm-2 form-control-label">Email</label>
 						<div class="col-sm-10">
-							<input type="email" class="form-control" id="email" name="email" value="{{$account->email}}">
+							<input type="email" class="form-control" id="email" name="email" value="{{$account->email}}" required>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="address" class="col-sm-2 form-control-label">Address</label>
 						<div class="col-sm-10">
-							<textarea type="text" class="form-control" id="address" name="address">{{$account->contact->address}}</textarea> 
+							<textarea type="text" class="form-control" id="address" required name="address">{{$account->contact->address}}</textarea> 
 						</div>
 					</div>
 					<div class="form-group row">

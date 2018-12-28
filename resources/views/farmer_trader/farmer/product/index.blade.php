@@ -225,13 +225,13 @@
 					<div class="form-group row">
 						<label for="editName" class="col-sm-2 form-control-label">Name</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="editName" name="editName">
+							<input type="text" class="form-control" id="editName" name="editName" required>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="editDescription" class="col-sm-2 form-control-label">Description</label>
 						<div class="col-sm-10">
-							<textarea name="editDescription" class="form-control" id="editDescription" name="editDescription"></textarea>
+							<textarea name="editDescription" class="form-control" id="editDescription" name="editDescription" required></textarea>
 						</div>
 					</div>
 					<div class="form-group row">
@@ -268,14 +268,14 @@
 					<div class="form-group row">
 						<label for="editQuantity" class="col-sm-2 form-control-label">Quantity</label>
 						<div class="col-sm-10">
-							<input type="number" class="form-control" id="editQuantity" name="editQuantity">
+							<input type="number" class="form-control" id="editQuantity" name="editQuantity" required>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="editPrice" class="col-sm-2 form-control-label">Price</label>
 						<div class="col-sm-10">
 							<div class="input-group">
-								<input type="number"  id="editPrice" name="editPrice" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+								<input type="number"  id="editPrice" name="editPrice" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" required>
 								<div class="input-group-append">
 									<span class="input-group-text">VNĐ</span>
 									<span class="input-group-text">.00</span>
@@ -287,7 +287,7 @@
 						<label for="editDiscount" class="col-sm-2 form-control-label">Discount</label>
 						<div class="col-sm-10">						
 							<div class="input-group">
-								<input type="number" step="0.1" id="editDiscount" name="editDiscount" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+								<input type="number" step="0.1" id="editDiscount" name="editDiscount" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" required>
 								<div class="input-group-append">
 									<span class="input-group-text">%</span>
 								</div>

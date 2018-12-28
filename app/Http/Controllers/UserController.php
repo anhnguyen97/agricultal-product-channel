@@ -28,7 +28,7 @@ class UserController extends Controller
     {
     	return Datatables::of(User::query())
     	->addColumn('action', function ($user) {
-    		return '<a title="List user" href="http://dss.me/admin/user-account/" class="btn btn-info btn-sm glyphicon glyphicon-list-alt btnShow" data-id="'.$user["id"].'"></a>&nbsp;<a title="Edit" class="btn btn-warning btn-sm glyphicon glyphicon-edit btnEdit" data-id='.$user["id"].'></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm glyphicon glyphicon-trash btnDelete" data-id='.$user["id"].'></a>';
+    		return '<a title="Edit" class="btn btn-warning btn-sm glyphicon glyphicon-edit btnEdit" data-id='.$user["id"].'></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm glyphicon glyphicon-trash btnDelete" data-id='.$user["id"].'></a>';
     	})
     	->editColumn('is_farmer', function ($user)
     	{

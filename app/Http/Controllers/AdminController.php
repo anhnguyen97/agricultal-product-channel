@@ -28,7 +28,7 @@ class AdminController extends Controller
     {
         return Datatables::of(Admin::query())
         ->addColumn('action', function ($admin) {
-            return '<a title="List admin" href="http://dss.me/admin/admin-account/" class="btn btn-info btn-sm glyphicon glyphicon-list-alt btnShow" data-id="'.$admin["id"].'"></a>&nbsp;<a title="Edit" class="btn btn-warning btn-sm glyphicon glyphicon-edit btnEdit" data-id='.$admin["id"].'></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm glyphicon glyphicon-trash btnDelete" data-id='.$admin["id"].'></a>';
+            return '<a title="Edit" class="btn btn-warning btn-sm glyphicon glyphicon-edit btnEdit" data-id='.$admin["id"].'></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm glyphicon glyphicon-trash btnDelete" data-id='.$admin["id"].'></a>';
         })
         ->editColumn('mobile', function($admin){
             return $admin->contact->mobile;

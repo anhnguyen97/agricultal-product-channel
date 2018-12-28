@@ -27,7 +27,7 @@ class CategoryController extends Controller
     {
         return Datatables::of(Category::query())
         ->addColumn('action', function ($category) {
-            return '<a title="List product" href="http://dss.me/admin/category/'.$category['slug'].'" class="btn btn-info btn-sm glyphicon glyphicon-list-alt btnShow" data-id="'.$category["id"].'"></a>&nbsp;<a title="Edit" class="btn btn-warning btn-sm glyphicon glyphicon-edit btnEdit" data-id='.$category["id"].'></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm glyphicon glyphicon-trash btnDelete" data-id='.$category["id"].'></a>';
+            return '<a title="Edit" class="btn btn-warning btn-sm glyphicon glyphicon-edit btnEdit" data-id='.$category["id"].'></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm glyphicon glyphicon-trash btnDelete" data-id='.$category["id"].'></a>';
         })
         ->editColumn('updated_at', function($category){
             return $category->updated_at->format('H:i:s d/m/Y');

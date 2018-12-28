@@ -6,6 +6,8 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('shop/styles/single_styles.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('shop/styles/single_responsive.css') }}"> 
 <link rel="stylesheet" href="{{ asset('admins/bower_components/bootstrapv4.0/css/bootstrap.min.css') }}">
+{{-- <link rel="stylesheet" href="{{ asset('admins/bower_components/bootstrapv4.0/css/bootstrap.min.css') }}"> --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 @endsection
 
 @section('navigation')
@@ -66,16 +68,18 @@
                     <li><i class="fa fa-star" aria-hidden="true"></i></li>
                     <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
                 </ul> --}}
-                <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
+                @if (Auth::user()->is_farmer == 0)
+                <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center" id="listProduct">
                     <span>Quantity:</span>
                     <div class="quantity_selector">
                         <span class="minus"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                        <span id="quantity_value">10</span>{{$product->unit}}
+                        <span id="quantity_value">1</span>{{$product->unit}}
                         <span class="plus"><i class="fa fa-plus" aria-hidden="true"></i></span>
                     </div>
                     <div class="red_button add_to_cart_button"><a class="btnAddCart" data-id="{{$product->id}}">add to cart</a></div>
                     {{-- <div class="product_favorite d-flex flex-column align-items-center justify-content-center"></div> --}}
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -146,4 +150,29 @@
 @include('channel.layouts.js')
 <script src="{{ asset('shop/plugins/jquery-ui-1.12.1.custom/jquery-ui.js') }}" type="text/javascript" charset="utf-8" async defer></script>
 <script src="{{ asset('shop/js/single_custom.js') }}" type="text/javascript" charset="utf-8" async defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('#listProduct').on('click', '.btnAddCart', function(event){
+        event.preventDefault();
+        /* Act on the event */
+        var id = $(this).data('id');
+
+        $.ajax({
+            url: '{{ asset('') }}trader/order/'+id,
+            type: 'GET',
+            success: function(res){
+                toastr['success']('Thêm vào giỏ hàng thành công!');
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                toastr['error']('Xảy ra lỗi khi thêm sản phẩm vào giỏ hàng');
+            }
+        })
+    })
+</script>
 @endsection

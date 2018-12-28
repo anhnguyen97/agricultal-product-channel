@@ -276,7 +276,7 @@ QUẢN LÝ ADMIN
 			success: function(res){
 				$('#modalAddAdmin').modal('hide');
 				toastr['success']('Add new Admin successfully!');
-				$('#tableAdmin').prepend('<tr id="row-'+res.id+'" role="row"><td>'+res.id+'</td><td><img src=\"http://agri.me/'+res.avatar+'" class="img-circle" height="80px" width="80px"></td><td>'+res.name+'</td><td>'+res.email+'</td><td>'+res.contact.mobile+'</td><td>'+res.contact.address+'</td><td>'+res.created_at+'</td><td>'+res.updated_at+'</td><td><a title="List admin" href="http://dss.me/admin/admin-account/" class="btn btn-info btn-sm glyphicon glyphicon-list-alt btnShow" data-id="'+res.id+'"></a>&nbsp;<a title="Edit" class="btn btn-warning btn-sm glyphicon glyphicon-edit btnEdit" data-id="'+res.id+'"></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm glyphicon glyphicon-trash btnDelete" data-id="'+res.id+'"></a></td></tr>');
+				$('#tableAdmin').prepend('<tr id="row-'+res.id+'" role="row"><td>'+res.id+'</td><td><img src=\"http://agri.me/'+res.avatar+'" class="img-circle" height="80px" width="80px"></td><td>'+res.name+'</td><td>'+res.email+'</td><td>'+res.contact.mobile+'</td><td>'+res.contact.address+'</td><td>'+res.created_at+'</td><td>'+res.updated_at+'</td><td><a title="Edit" class="btn btn-warning btn-sm glyphicon glyphicon-edit btnEdit" data-id="'+res.id+'"></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm glyphicon glyphicon-trash btnDelete" data-id="'+res.id+'"></a></td></tr>');
 				
 			},
 			error: function(xhr, ajaxOptions, thrownError){
@@ -329,7 +329,7 @@ QUẢN LÝ ADMIN
 				// alert('row');
 				row.remove();
 				toastr['success']('Update Account: '+res.name+' successfully!');
-				$('#tableAdmin').prepend('<tr id="row-'+res.id+'" role="row"><td>'+res.id+'</td><td><img src=\"http://agri.me/'+res.avatar+'" class="img-circle" height="80px" width="80px"></td><td>'+res.name+'</td><td>'+res.email+'</td><td>'+res.contact.mobile+'</td><td>'+res.contact.address+'</td><td>'+res.created_at+'</td><td>'+res.updated_at+'</td><td><a title="List admin" href="http://dss.me/admin/admin-account/" class="btn btn-info btn-sm glyphicon glyphicon-list-alt btnShow" data-id="'+res.id+'"></a>&nbsp;<a title="Edit" class="btn btn-warning btn-sm glyphicon glyphicon-edit btnEdit" data-id="'+res.id+'"></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm glyphicon glyphicon-trash btnDelete" data-id="'+res.id+'"></a></td></tr>');
+				$('#tableAdmin').prepend('<tr id="row-'+res.id+'" role="row"><td>'+res.id+'</td><td><img src=\"http://agri.me/'+res.avatar+'" class="img-circle" height="80px" width="80px"></td><td>'+res.name+'</td><td>'+res.email+'</td><td>'+res.contact.mobile+'</td><td>'+res.contact.address+'</td><td>'+res.created_at+'</td><td>'+res.updated_at+'</td><td><a title="Edit" class="btn btn-warning btn-sm glyphicon glyphicon-edit btnEdit" data-id="'+res.id+'"></a>&nbsp;<a title="Delete" class="btn btn-danger btn-sm glyphicon glyphicon-trash btnDelete" data-id="'+res.id+'"></a></td></tr>');
 			},
 			error: function(xhr, ajaxOptions, thrownError){
 				toastr['error']('Edit failed!');
